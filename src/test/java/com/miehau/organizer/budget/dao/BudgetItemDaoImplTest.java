@@ -2,8 +2,8 @@ package com.miehau.organizer.budget.dao;
 
 
 import com.miehau.organizer.budget.entity.BudgetItem;
+import com.miehau.organizer.budget.exception.ItemAlreadyExists;
 import com.miehau.organizer.budget.exception.ItemNotFoundException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +30,7 @@ public class BudgetItemDaoImplTest {
 
     @Test
     @Rollback
-    public void shouldAddBudgetItem() throws ItemNotFoundException {
+    public void shouldAddBudgetItem() throws ItemNotFoundException, ItemAlreadyExists {
         //given
         BudgetItem input = new BudgetItem("Milk", "Goat", new BigDecimal("1"), new Date());
 
@@ -82,7 +84,7 @@ public class BudgetItemDaoImplTest {
 
     @Test
     @Rollback
-    public void shouldUpdateExistingElement() throws ItemNotFoundException {
+    public void shouldUpdateExistingElement() throws ItemNotFoundException, ItemAlreadyExists {
         //given
         BudgetItem input = new BudgetItem("Porridge", "Tesco!", new BigDecimal("0.5"), new Date());
         String newName = "Milk";
@@ -96,9 +98,10 @@ public class BudgetItemDaoImplTest {
         assertEquals(true, result.contains(input));
     }
 
+
     @Test
     @Rollback
-    public void shouldGetItemsInBetweenDates() {
+    public void shouldGetItemsInBetweenDates() throws ItemAlreadyExists {
         //given
         Date startDate = new Calendar.Builder().setDate(2018, 1, 1).build().getTime();
         Date endDate = new Calendar.Builder().setDate(2018, 4, 1).build().getTime();
@@ -119,7 +122,7 @@ public class BudgetItemDaoImplTest {
 
     @Test
     @Rollback
-    public void shouldNotGetItemsInBetweenDatesOuter() {
+    public void shouldNotGetItemsInBetweenDatesOuter() throws ItemAlreadyExists {
         //given
         Date startDate = new Calendar.Builder().setDate(2018, 5, 1).build().getTime();
         Date endDate = new Calendar.Builder().setDate(2018, 6, 1).build().getTime();
@@ -139,7 +142,7 @@ public class BudgetItemDaoImplTest {
 
     @Test
     @Rollback
-    public void shouldGetItemBetweenDatesOnStartDate(){
+    public void shouldGetItemBetweenDatesOnStartDate() throws ItemAlreadyExists {
         //given
         Date startDate = new Calendar.Builder().setDate(2018, 5, 1).build().getTime();
         Date endDate = new Calendar.Builder().setDate(2018, 6, 1).build().getTime();
@@ -157,7 +160,7 @@ public class BudgetItemDaoImplTest {
 
     @Test
     @Rollback
-    public void shouldGetItemBetweenDatesOnEndDate(){
+    public void shouldGetItemBetweenDatesOnEndDate() throws ItemAlreadyExists {
         //given
         Date startDate = new Calendar.Builder().setDate(2018, 5, 1).build().getTime();
         Date endDate = new Calendar.Builder().setDate(2018, 6, 1).build().getTime();
@@ -171,5 +174,22 @@ public class BudgetItemDaoImplTest {
         //then
         assertEquals(1, result.size());
         assertEquals(item1, result.iterator().next());
+    }
+
+    @Test(expected = ItemAlreadyExists.class)
+    @Rollback
+    public void shouldNotAddItemIfAlreadyExists() throws ItemAlreadyExists {
+        //given
+        Date startDate = new Calendar.Builder().setDate(2018, 5, 1).build().getTime();
+        Date endDate = new Calendar.Builder().setDate(2018, 6, 1).build().getTime();
+        Date creationDateItem1 = new Calendar.Builder().setDate(2018, 6, 1).build().getTime();
+        BudgetItem item1 = new BudgetItem("Porridge", "Tesco!", new BigDecimal("0.5"), creationDateItem1);
+        dao.save(item1);
+        dao.save(item1);
+
+        //when
+        Collection<BudgetItem> result = dao.getItemsBetweenDates(startDate, endDate);
+
+        //then
     }
 }

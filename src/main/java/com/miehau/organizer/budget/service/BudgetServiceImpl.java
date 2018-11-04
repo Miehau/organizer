@@ -1,8 +1,9 @@
 package com.miehau.organizer.budget.service;
 
 import com.miehau.organizer.budget.dao.BudgetDao;
-import com.miehau.organizer.budget.dao.BudgetItemDaoImpl;
 import com.miehau.organizer.budget.entity.BudgetItem;
+import com.miehau.organizer.budget.exception.ItemAlreadyExists;
+import com.miehau.organizer.budget.exception.ItemNotFoundException;
 
 import java.util.Collection;
 import java.util.Date;
@@ -15,7 +16,7 @@ public class BudgetServiceImpl implements BudgetService {
     }
 
     @Override
-    public Collection<BudgetItem> getAllBudgetItems() {
+    public Collection<BudgetItem> getAllItems() {
         return budgetDao.getAll();
     }
 
@@ -25,17 +26,17 @@ public class BudgetServiceImpl implements BudgetService {
     }
 
     @Override
-    public void addItem(BudgetItem itemToAdd) {
-
+    public void addItem(BudgetItem itemToAdd) throws ItemAlreadyExists {
+        budgetDao.save(itemToAdd);
     }
 
     @Override
-    public void deleteItem(Long id) {
-
+    public void deleteItem(Long id) throws ItemNotFoundException {
+        budgetDao.delete(id);
     }
 
     @Override
-    public void update(BudgetItem itemToUpdate) {
-
+    public void update(BudgetItem itemToUpdate) throws ItemNotFoundException {
+        budgetDao.update(itemToUpdate);
     }
 }

@@ -1,10 +1,13 @@
 package com.miehau.organizer.budget.service;
 
 import com.miehau.organizer.budget.dao.BudgetDao;
-import com.miehau.organizer.budget.dao.BudgetItemDaoImpl;
 import com.miehau.organizer.budget.entity.BudgetItem;
+import com.miehau.organizer.budget.exception.ItemAlreadyExists;
+import com.miehau.organizer.budget.exception.ItemNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -16,15 +19,19 @@ import java.util.Collection;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class BudgetServiceTest {
-    BudgetDao dao = mock(BudgetItemDaoImpl.class);
-    BudgetService budgetService = new BudgetServiceImpl(dao);
+    @Mock
+    BudgetDao dao;
+    @InjectMocks
+    BudgetServiceImpl budgetService;
 
     @Test
     public void shouldReturnBudgetItemsBetweenDates() {
@@ -61,7 +68,7 @@ public class BudgetServiceTest {
         //given
         when(dao.getAll()).thenReturn(Arrays.asList(new BudgetItem()));
         //when
-        Collection<BudgetItem> result = budgetService.getAllBudgetItems();
+        Collection<BudgetItem> result = budgetService.getAllItems();
 
         //then
         assertEquals(1, result.size());
@@ -112,14 +119,69 @@ public class BudgetServiceTest {
         assertEquals(0, result.size());
     }
 
-    public void shouldAddNewItem(){
+    @Test
+    public void shouldAddNewItem() throws ItemAlreadyExists {
+        //given
+        Date creationDateItem1 = new Calendar.Builder().setDate(2018, 6, 1).build().getTime();
+        BudgetItem item1 = new BudgetItem("Porridge", "Tesco!", new BigDecimal("0.5"), creationDateItem1);
+        when(dao.getAll()).thenReturn(Arrays.asList(item1));
+        //when
+        budgetService.addItem(item1);
+        //then
+        verify(dao).save(item1);
+
 
     }
-    public void shouldNotAddElementIfExists(){}
-    public void shouldDeleteElement(){}
-    public void shouldThrowExceptionIfElementsDoesntExist(){}
-    public void shouldUpdateElement(){}
-    public void shouldThrowExceptionIfElementDoesntExist(){}
+
+    @Test(expected = ItemAlreadyExists.class)
+    public void shouldNotAddElementIfExists() throws ItemAlreadyExists {
+        Date creationDateItem1 = new Calendar.Builder().setDate(2018, 6, 1).build().getTime();
+        BudgetItem item1 = new BudgetItem("Porridge", "Tesco!", new BigDecimal("0.5"), creationDateItem1);
+        doThrow(new ItemAlreadyExists()).when(dao).save(any());
+        //when
+        budgetService.addItem(item1);
+    }
+
+
+    @Test
+    public void shouldDeleteElement() throws ItemNotFoundException {
+        //given
+        Long id = new Long(3);
+        //when
+        budgetService.deleteItem(id);
+        //then
+        verify(dao).delete(id);
+    }
+
+    @Test(expected = ItemNotFoundException.class)
+    public void shouldThrowExceptionOnDeleteElementIfNotExistent() throws ItemNotFoundException {
+        //given
+        Long id = new Long(1);
+        doThrow(new ItemNotFoundException()).when(dao).delete(id);
+        //when
+        budgetService.deleteItem(id);
+    }
+
+    @Test
+    public void shouldUpdateElementIfExists() throws ItemNotFoundException {
+        //given
+        BudgetItem item = new BudgetItem();
+        //when
+        budgetService.update(item);
+        //then
+        verify(dao).update(item);
+    }
+
+    @Test(expected = ItemNotFoundException.class)
+    public void shouldThrowExceptionIfElementDoesntExistOnUpdate() throws ItemNotFoundException {
+        //given
+        BudgetItem item = new BudgetItem();
+        doThrow(new ItemNotFoundException()).when(dao).update(item);
+
+        //when
+        budgetService.update(item);
+
+    }
 
 
 }

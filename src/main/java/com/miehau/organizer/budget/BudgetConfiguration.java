@@ -2,8 +2,6 @@ package com.miehau.organizer.budget;
 
 import com.miehau.organizer.budget.dao.BudgetDao;
 import com.miehau.organizer.budget.dao.BudgetItemDaoImpl;
-import com.miehau.organizer.budget.dao.Dao;
-import com.miehau.organizer.budget.entity.BudgetItem;
 import com.miehau.organizer.budget.service.BudgetService;
 import com.miehau.organizer.budget.service.BudgetServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -21,4 +19,5 @@ public class BudgetConfiguration {
     public BudgetService getBudgetService() {
         return new BudgetServiceImpl(getBudgetItemDao());
     }
+
 }
