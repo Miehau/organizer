@@ -1,0 +1,12 @@
+language: java
+sudo: false
+
+jobs:
+  include:
+    - stage: test
+      jdk: oraclejdk12
+      script: .\gradlew clean install test cucumber
+
+branches:
+  only:
+    - master
