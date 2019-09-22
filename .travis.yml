@@ -1,11 +1,11 @@
 language: java
-sudo: false
+sudo: true
 
 jobs:
   include:
     - stage: test
       jdk: oraclejdk12
-      script: .\gradlew clean install test cucumber
+      script: ./gradlew clean install test cucumber
 
 branches:
   only:
