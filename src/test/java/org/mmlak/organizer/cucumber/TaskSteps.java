@@ -31,4 +31,9 @@ public class TaskSteps {
     public void tasksAreEmpty(){
         assertThat(response).isEmpty();
     }
+
+    @Then("^task list contains (\\d) elements$")
+    public void tasksListContains(final int size){
+        assertThat(response).hasSize(size);
+    }
 }
