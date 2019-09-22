@@ -5,7 +5,7 @@ jobs:
   include:
     - stage: test
       jdk: oraclejdk12
-      script: ./gradlew clean install test cucumber
+      script: ./gradlew clean assemble test cucumber
 
 branches:
   only:

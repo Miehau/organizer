@@ -42,6 +42,13 @@ dependencies {
 	testImplementation 'info.cukes:cucumber-junit:1.2.4'
 }
 
+test {
+	testLogging {
+		events "passed", "skipped", "failed"
+		exceptionFormat "full"
+	}
+}
+
 task cucumber() {
 	dependsOn assemble, compileTestJava
 	doLast {
