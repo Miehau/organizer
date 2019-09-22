@@ -1,0 +1,8 @@
+version: '3'
+services:
+        organizer:
+                build: 
+                        context: .
+                container_name: "organizer"
+                ports:
+                        - "8080:8080"

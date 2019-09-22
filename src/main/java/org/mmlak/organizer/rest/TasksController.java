@@ -7,6 +7,7 @@ import org.mmlak.organizer.rest.entity.ResponseDocument;
 import org.mmlak.organizer.rest.entity.TasksResponseAttributes;
 import org.mmlak.organizer.service.TaskService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class TasksController {
     private final TaskService taskService;
 
     @GetMapping("/all")
+    @CrossOrigin
     public ResponseEntity<ResponseDocument> getAll() {
         return ok(toResponse(taskService.getAll()));
     }

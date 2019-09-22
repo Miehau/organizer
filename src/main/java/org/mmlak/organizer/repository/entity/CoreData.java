@@ -1,12 +1,16 @@
 package org.mmlak.organizer.repository.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.time.Instant;
 
 @Data
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 @Embeddable
 public class CoreData {
 
