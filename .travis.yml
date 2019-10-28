@@ -4,7 +4,7 @@ sudo: true
 jobs:
   include:
     - stage: test
-      jdk: oraclejdk12
+      jdk: oraclejdk8
       script: ./gradlew clean assemble test cucumber
 
 branches:

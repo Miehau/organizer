@@ -8,6 +8,8 @@ import org.mmlak.organizer.repository.entity.Task;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
+
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,11 +30,11 @@ public class TaskServiceTest {
 
     @Test
     public void shouldReturnAllItems(){
-        final var task = new Task();
-        final var tasks = singletonList(task);
+        final Task task = new Task();
+        final List<Task> tasks = singletonList(task);
         when(repository.findAll()).thenReturn(tasks);
 
-        final var result = taskService.getAll();
+        final List<Task> result = taskService.getAll();
 
         assertThat(result).isEqualTo(tasks);
     }
@@ -41,7 +43,7 @@ public class TaskServiceTest {
     public void shouldReturnEmptyArrayIfNoTasks(){
         when(repository.findAll()).thenReturn(emptyList());
 
-        final var all = taskService.getAll();
+        final List<Task> all = taskService.getAll();
 
         assertThat(all).isEmpty();
     }
