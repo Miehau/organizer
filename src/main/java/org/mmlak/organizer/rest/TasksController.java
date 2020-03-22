@@ -7,13 +7,13 @@ import org.mmlak.organizer.rest.entity.ResponseData;
 import org.mmlak.organizer.rest.entity.ResponseDocument;
 import org.mmlak.organizer.rest.entity.TasksResponseAttributes;
 import org.mmlak.organizer.service.TaskService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
@@ -41,5 +41,10 @@ public class TasksController {
         );
     }
 
-
+    @PutMapping("/{taskId}")
+    @CrossOrigin(origins = "http://localhost:3000")
+    private ResponseEntity<ResponseDocument> updateTask(@PathVariable final UUID taskId, @RequestBody  final Task task){
+        Task updatedTask = taskService.updateTask(task);
+        return ok(toResponse(Collections.singletonList(updatedTask)));
+    }
 }
