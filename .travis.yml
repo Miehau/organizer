@@ -5,7 +5,11 @@ jobs:
   include:
     - stage: test
       jdk: openjdk11
-      script: ./gradlew clean build
+      script: 
+        - ./gradlew clean build
+        - docker build . --tag mmlak/organizer:latest
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push mmlak/organizer
 
 branches:
   only:
