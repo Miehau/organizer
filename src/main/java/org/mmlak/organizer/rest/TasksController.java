@@ -29,7 +29,7 @@ public class TasksController {
     private final TaskServiceImpl taskService;
 
     @GetMapping("/all")
-    @CrossOrigin
+    @CrossOrigin(origins = "*")
     public ResponseEntity<ResponseDocument> getAll() {
         return ok(toResponse(taskService.getAll()));
     }
@@ -44,14 +44,14 @@ public class TasksController {
     }
 
     @PutMapping("/{taskId}")
-    @CrossOrigin
+    @CrossOrigin(origins = "*")
     private ResponseEntity<ResponseDocument> updateTask(@PathVariable final UUID taskId, @RequestBody final Task task) {
         Task updatedTask = taskService.update(task);
         return ok(toResponse(Collections.singletonList(updatedTask)));
     }
 
     @PostMapping("/")
-    @CrossOrigin
+    @CrossOrigin(origins = "*")
     public ResponseEntity<ResponseDocument> addTask(@RequestBody final Task task) {
         final Task createdTask = taskService.add(task);
         return created(URI.create(format("http://localhost:8080/tasks/%s", createdTask.getId())))
