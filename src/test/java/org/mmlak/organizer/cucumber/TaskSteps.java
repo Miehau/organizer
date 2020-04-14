@@ -4,7 +4,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.mmlak.organizer.OrganizerApplication;
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.service.TaskService;
+import org.mmlak.organizer.service.TaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,7 +20,7 @@ public class TaskSteps {
     private List<Task> response;
 
     @Autowired
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @When("^request for all tasks is made$")
     public void getAllTasks(){

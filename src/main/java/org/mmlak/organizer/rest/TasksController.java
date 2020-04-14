@@ -6,16 +6,18 @@ import org.mmlak.organizer.repository.entity.Task;
 import org.mmlak.organizer.rest.entity.ResponseData;
 import org.mmlak.organizer.rest.entity.ResponseDocument;
 import org.mmlak.organizer.rest.entity.TasksResponseAttributes;
-import org.mmlak.organizer.service.TaskService;
-import org.springframework.http.HttpStatus;
+import org.mmlak.organizer.service.TaskServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
+import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -24,7 +26,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @Slf4j
 public class TasksController {
 
-    private final TaskService taskService;
+    private final TaskServiceImpl taskService;
 
     @GetMapping("/all")
     @CrossOrigin
@@ -42,9 +44,17 @@ public class TasksController {
     }
 
     @PutMapping("/{taskId}")
-    @CrossOrigin(origins = "http://localhost:3000")
-    private ResponseEntity<ResponseDocument> updateTask(@PathVariable final UUID taskId, @RequestBody  final Task task){
-        Task updatedTask = taskService.updateTask(task);
+    @CrossOrigin
+    private ResponseEntity<ResponseDocument> updateTask(@PathVariable final UUID taskId, @RequestBody final Task task) {
+        Task updatedTask = taskService.update(task);
         return ok(toResponse(Collections.singletonList(updatedTask)));
+    }
+
+    @PostMapping("/")
+    @CrossOrigin
+    public ResponseEntity<ResponseDocument> addTask(@RequestBody final Task task) {
+        final Task createdTask = taskService.add(task);
+        return created(URI.create(format("http://localhost:8080/tasks/%s", createdTask.getId())))
+                .body(toResponse(Collections.singletonList(task)));
     }
 }

@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mmlak.organizer.repository.entity.Task;
 import org.mmlak.organizer.rest.entity.ResponseDocument;
 import org.mmlak.organizer.rest.entity.TasksResponseAttributes;
-import org.mmlak.organizer.service.TaskService;
+import org.mmlak.organizer.service.TaskServiceImpl;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class TasksControllerTest {
 
     @Mock
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     private TasksController tasksController;
 

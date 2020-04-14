@@ -16,16 +16,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TaskServiceTest {
+public class TaskServiceImplTest {
 
     @Mock
     private TasksRepository repository;
 
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @Before
     public void setUp(){
-        this.taskService = new TaskService(repository);
+        this.taskService = new TaskServiceImpl(repository);
     }
 
     @Test

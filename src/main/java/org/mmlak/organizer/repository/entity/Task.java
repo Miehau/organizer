@@ -1,20 +1,21 @@
 package org.mmlak.organizer.repository.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor(force = true)
 @Entity(name = "tasks")
+@NoArgsConstructor(force=true)
+@AllArgsConstructor
 public class Task {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID id;
     @Column
     private final String name;
@@ -24,6 +25,10 @@ public class Task {
     private final boolean done;
     @Column
     private final Instant dateCompleted;
+    @Embedded
     private final CoreData coreData;
 
 }
+
+
+
