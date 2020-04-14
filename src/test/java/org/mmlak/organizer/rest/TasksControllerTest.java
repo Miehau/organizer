@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,5 +41,16 @@ public class TasksControllerTest {
         assertThat(response.getBody().getData()).hasSize(1);
         assertThat(response.getBody().getData().get(0).getAttributes()).isExactlyInstanceOf(TasksResponseAttributes.class);
         assertThat(((TasksResponseAttributes)response.getBody().getData().get(0).getAttributes()).getTask()).isEqualTo(task);
+    }
+
+    @Test
+    public void shouldSaveNewTask(){
+        final Task task = new Task();
+
+        when(taskService.add(task)).thenReturn(task);
+
+        tasksController.addTask(task);
+
+        verify(taskService).add(task);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.mmlak.organizer.util.CollectionUtil.toList;
 
 @Service
@@ -26,14 +27,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task update(final Task task) {
-        if (repository.findById(task.getId()).isEmpty()){
-            throw new RuntimeException("Cannot update task, as it does not exist!");
+        if (!repository.existsById(task.getId())) {
+            throw new RuntimeException(format("Cannot update task [%s], as it does not exist!", task.getId()));
         }
         return repository.save(task);
     }
 
     @Override
-    public Task add(final Task task){
+    public Task add(final Task task) {
         log.debug("Creating task [{}].", task);
         return repository.save(task);
     }
