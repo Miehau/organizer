@@ -58,7 +58,7 @@ public class TasksController {
                 .body(toResponse(Collections.singletonList(task)));
     }
 
-    @DeleteMapping("/{taskId")
+    @DeleteMapping("/{taskId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<ResponseDocument> removeTask(@PathVariable final UUID taskId){
         taskService.delete(taskId);
