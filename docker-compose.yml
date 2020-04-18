@@ -1,8 +1,8 @@
 version: '3'
 services:
         organizer:
-                build: 
-                        context: .
+                build: .
+                image: adoptopenjdk/openjdk12:latest
                 container_name: "organizer"
-                ports:
-                        - "8080:8080"
+                expose:
+                        - "8080"

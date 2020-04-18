@@ -50,10 +50,11 @@ public class TasksController {
         return ok(toResponse(Collections.singletonList(updatedTask)));
     }
 
-    @PostMapping("/")
-    @CrossOrigin(origins = "*")
+    @PostMapping
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<ResponseDocument> addTask(@RequestBody final Task task) {
         final Task createdTask = taskService.add(task);
+        log.debug("Created task [{}].", task);
         return created(URI.create(format("http://localhost:8080/tasks/%s", createdTask.getId())))
                 .body(toResponse(Collections.singletonList(task)));
     }
