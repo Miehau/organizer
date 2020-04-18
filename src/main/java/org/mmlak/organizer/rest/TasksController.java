@@ -17,8 +17,7 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.ResponseEntity.created;
-import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping(value = "/tasks", produces = "application/json")
@@ -44,7 +43,7 @@ public class TasksController {
     }
 
     @PutMapping("/{taskId}")
-    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     private ResponseEntity<ResponseDocument> updateTask(@PathVariable final UUID taskId, @RequestBody final Task task) {
         Task updatedTask = taskService.update(task);
         return ok(toResponse(Collections.singletonList(updatedTask)));
@@ -57,5 +56,13 @@ public class TasksController {
         log.debug("Created task [{}].", task);
         return created(URI.create(format("http://localhost:8080/tasks/%s", createdTask.getId())))
                 .body(toResponse(Collections.singletonList(task)));
+    }
+
+    @DeleteMapping("/{taskId")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<ResponseDocument> removeTask(@PathVariable final UUID taskId){
+        taskService.delete(taskId);
+        return noContent().build();
+
     }
 }

@@ -6,6 +6,7 @@ import org.mmlak.organizer.repository.entity.Task;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 import static java.lang.String.format;
 import static org.mmlak.organizer.util.CollectionUtil.toList;
@@ -37,5 +38,10 @@ public class TaskServiceImpl implements TaskService {
     public Task add(final Task task) {
         log.debug("Creating task [{}].", task);
         return repository.save(task);
+    }
+
+    @Override
+    public void delete(UUID taskId) {
+        repository.deleteById(taskId);
     }
 }
