@@ -5,16 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 @Data
-@Entity(name = "tasks")
+@Entity(name = "item_list")
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
-public class Task {
-
+public class ItemList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID id;
@@ -23,15 +21,12 @@ public class Task {
     @Column
     private final String description;
     @Column
-    private final boolean done;
-    @Column
-    private final Instant dateCompleted;
-    @ManyToMany(mappedBy = "items", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private final List<ItemList> itemList;
+    private final boolean visibleOnDashboard;
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "itemlist_item",
+    joinColumns = {@JoinColumn(name = "list_id")},
+    inverseJoinColumns = {@JoinColumn(name = "item_id")})
+    private List<Task> items;
     @Embedded
     private final CoreData coreData;
-
 }
-
-
-

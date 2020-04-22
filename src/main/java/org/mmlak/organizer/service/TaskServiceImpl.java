@@ -1,7 +1,9 @@
 package org.mmlak.organizer.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mmlak.organizer.repository.TasksRepository;
+import org.mmlak.organizer.repository.entity.ItemList;
 import org.mmlak.organizer.repository.entity.Task;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +15,12 @@ import static org.mmlak.organizer.util.CollectionUtil.toList;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
     private final TasksRepository repository;
+    private final ListService listService;
 
-    public TaskServiceImpl(final TasksRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public List<Task> getAll() {
@@ -37,6 +38,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task add(final Task task) {
         log.debug("Creating task [{}].", task);
+        final ItemList itemList = listService.getAll().get(0);
+        itemList.getItems().add(task);
+        task.getItemList().add(itemList);
         return repository.save(task);
     }
 
