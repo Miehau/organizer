@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ public class ItemList {
     @JoinTable(name = "itemlist_item",
     joinColumns = {@JoinColumn(name = "list_id")},
     inverseJoinColumns = {@JoinColumn(name = "item_id")})
-    private List<Task> items;
+    private List<Task> items = new ArrayList<>();
     @Embedded
     private final CoreData coreData;
 }
