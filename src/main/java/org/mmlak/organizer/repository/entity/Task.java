@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class Task {
     @Column
     private final Instant dateCompleted;
     @ManyToMany(mappedBy = "items", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private final List<ItemList> itemList;
+    private final List<ItemList> itemList = new ArrayList<>();
     @Embedded
     private final CoreData coreData;
 

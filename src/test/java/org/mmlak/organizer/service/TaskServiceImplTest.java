@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mmlak.organizer.repository.TasksRepository;
+import org.mmlak.organizer.repository.entity.ItemList;
 import org.mmlak.organizer.repository.entity.Task;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -14,20 +15,22 @@ import java.util.UUID;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TaskServiceImplTest {
 
     @Mock
     private TasksRepository repository;
+    @Mock
+    private ListService listService;
 
     private TaskServiceImpl taskService;
 
     @Before
     public void setUp() {
-        this.taskService = new TaskServiceImpl(repository);
+        this.taskService = new TaskServiceImpl(repository, listService);
+        when(listService.getAll()).thenReturn(singletonList(mock(ItemList.class)));
     }
 
     @Test
