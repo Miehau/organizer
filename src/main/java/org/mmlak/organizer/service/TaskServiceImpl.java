@@ -39,7 +39,6 @@ public class TaskServiceImpl implements TaskService {
     public Task add(final Task task) {
         log.debug("Creating task [{}].", task);
         final ItemList itemList = listService.getAll().get(0);
-        itemList.getItems().add(task);
         task.getItemList().add(itemList);
         return repository.save(task);
     }
