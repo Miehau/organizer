@@ -12,10 +12,15 @@ spring:
       ddl-auto: create
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8083/auth/realms/organizer
-          jwk-set-uri: http://localhost:8083/auth/realms/organizer/protocol/openid-connect/certs
+      client:
+        client-id: v-dashboard
+        client-secret: v-dashboard-secret
+
+security:
+  oauth2:
+    client:
+      client-id: first-client
+      client-secret: noonewilleverguess
 server:
   port: 9090
 

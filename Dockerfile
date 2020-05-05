@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:armv7l-debian-jdk-11.0.6_10-slim
+FROM adoptopenjdk/openjdk12:latest
 WORKDIR /opt
 RUN mkdir /app
 ADD build/libs/orhanizer-0.0.1-SNAPSHOT.jar /opt/app/organizer.jar

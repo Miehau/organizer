@@ -13,15 +13,12 @@ Configuration:
  
   Loggers:
     logger:
-      -
-        name: org.mmlak.organizer
+      - name: org.mmlak.organizer
         level: debug
         additivity: false
         AppenderRef:
           ref: STDOUT
-    logger:
-      -
-        name: org.springframework
+      - name: org.springframework
         leve: debug
         AppenderRef:
           ref: STDOUT
