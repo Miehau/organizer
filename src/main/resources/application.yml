@@ -15,7 +15,6 @@ spring:
       client:
         client-id: v-dashboard
         client-secret: v-dashboard-secret
-
 security:
   oauth2:
     client:
