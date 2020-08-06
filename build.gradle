@@ -67,3 +67,18 @@ task cucumber() {
 		}
 	}
 }
+
+task buildNpm(type: Exec) {
+	workingDir './src/v-dashboard'
+	commandLine 'npm', 'run', 'build'
+}
+
+task copyResourcesToBuild(type: Copy){
+	dependsOn 'buildNpm'
+	from "$projectDir/src/v-dashboard/dist"
+	into "$buildDir/resources/main/static"
+}
+
+processResources{
+	dependsOn copyResourcesToBuild
+}

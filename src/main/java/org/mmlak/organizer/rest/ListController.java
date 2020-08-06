@@ -8,6 +8,7 @@ import org.mmlak.organizer.rest.entity.ResponseData;
 import org.mmlak.organizer.rest.entity.ResponseDocument;
 import org.mmlak.organizer.service.ListService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -28,17 +29,18 @@ public class ListController {
     private final ListService listService;
 
     @GetMapping("/all")
-    @CrossOrigin(origins = "*")
+    @CrossOrigin
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDocument> getAllLists(){
         final List<ItemList> lists = listService.getAll();
         return ok(toResponse(lists));
     }
 
     @PostMapping
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @CrossOrigin
     public ResponseEntity<ResponseDocument> save(@RequestBody final ItemList itemList){
         final ItemList createdList = listService.save(itemList);
-        return created(URI.create(format("http://192.168.0.26:9090/list/{%s}", createdList.getId())))
+        return created(URI.create(format("http://localhost:9090/list/{%s}", createdList.getId())))
                 .body(toResponse(singletonList(createdList)));
     }
 

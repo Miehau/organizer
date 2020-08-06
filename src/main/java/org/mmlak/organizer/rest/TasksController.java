@@ -28,7 +28,7 @@ public class TasksController {
     private final TaskServiceImpl taskService;
 
     @GetMapping("/all")
-    @CrossOrigin(origins = "*")
+    @CrossOrigin
     public ResponseEntity<ResponseDocument> getAll() {
         return ok(toResponse(taskService.getAll()));
     }
@@ -43,7 +43,7 @@ public class TasksController {
     }
 
     @PutMapping("/{taskId}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @CrossOrigin
     private ResponseEntity<ResponseDocument> updateTask(@PathVariable final UUID taskId, @RequestBody final Task task) {
         Task updatedTask = taskService.update(task);
         return ok(toResponse(Collections.singletonList(updatedTask)));

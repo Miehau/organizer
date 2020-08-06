@@ -1,84 +1,39 @@
 package org.mmlak.organizer.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
+import org.springframework.security.web.AuthenticationEntryPoint;
+
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
-)
+@EnableAuthorizationServer
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    @Qualifier("userService")
-    private UserDetailsService userDetailsService;
 
     @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
-
-    @Autowired
-    private AuthorizationRequestRepository<OAuth2AuthorizationRequest> defaultAuthorizationRequestRepository;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+    private DefaultSuccessHandler defaultSuccessHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
-
-    @Override
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+                // enable in memory based authentication with a user named user and admin
+                .inMemoryAuthentication().withUser("user").password("password").roles("USER")
+                .and().withUser("admin").password("password").roles("USER", "ADMIN");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .csrf()
-                .disable()
-                .formLogin()
-                .disable()
-                .httpBasic()
-                .disable()
-                .exceptionHandling()
-                .and()
+                .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/",
+                        "/index.html",
                         "/error",
                         "/favicon.ico",
                         "/**/*.png",
@@ -87,22 +42,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js")
+                        "/**/*.js",
+                        "/aaa")
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
+                .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
                 .and()
                 .oauth2Login()
-                .successHandler(authenticationSuccessHandler)
                 .authorizationEndpoint()
-                    .baseUri("/oauth2/authorize")
-                    .authorizationRequestRepository(defaultAuthorizationRequestRepository)
-                .and().userInfoEndpoint()
+                .baseUri("/oauth2/authorize")
                 .and()
+                .successHandler(defaultSuccessHandler)
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*");
+                .baseUri("/oauth2/callback/*")
+                .and();
+//        .loginPage("/aa");
     }
 
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        new OAuth2AuthenticationEntryPoint();
+        return (request, response, authException) -> response.sendRedirect("/login");
+    }
 }
