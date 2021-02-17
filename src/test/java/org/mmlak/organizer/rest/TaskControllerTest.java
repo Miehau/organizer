@@ -12,30 +12,28 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TasksControllerTest {
+public class TaskControllerTest {
 
     @Mock
     private TaskServiceImpl taskService;
 
-    private TasksController tasksController;
+    private TaskController taskController;
 
     @Before
     public void setUp(){
-        this.tasksController = new TasksController(taskService);
+        this.taskController = new TaskController(taskService);
     }
 
     @Test
     public void shouldReturnAllTasks(){
         final Task task = new Task();
-        when(taskService.getAll()).thenReturn(singletonList(task));
+//        when(taskService.getAll()).thenReturn(singletonList(task));
 
-        ResponseEntity<ResponseDocument> response = tasksController.getAll();
+        ResponseEntity<ResponseDocument> response = taskController.getAll();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getData()).hasSize(1);
@@ -47,9 +45,9 @@ public class TasksControllerTest {
     public void shouldSaveNewTask(){
         final Task task = new Task();
 
-        when(taskService.add(task)).thenReturn(task);
+//        when(taskService.add(task)).thenReturn(task);
 
-        tasksController.addTask(task);
+        taskController.addTask(task);
 
         verify(taskService).add(task);
     }

@@ -23,11 +23,15 @@ public class ItemList {
     private final String description;
     @Column
     private final boolean visibleOnDashboard;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "itemlist_item",
-    joinColumns = {@JoinColumn(name = "list_id")},
-    inverseJoinColumns = {@JoinColumn(name = "item_id")})
+            joinColumns = {@JoinColumn(name = "list_id")},
+            inverseJoinColumns = {@JoinColumn(name = "item_id")})
     private List<Task> items = new ArrayList<>();
     @Embedded
     private final CoreData coreData;
+
+    public void addTask(Task task) {
+        this.items.add(task);
+    }
 }

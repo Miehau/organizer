@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mmlak.organizer.repository.TasksRepository;
 import org.mmlak.organizer.repository.entity.ItemList;
 import org.mmlak.organizer.repository.entity.Task;
+import org.mmlak.organizer.rest.entity.TaskDTO;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -30,7 +31,7 @@ public class TaskServiceImplTest {
     @Before
     public void setUp() {
         this.taskService = new TaskServiceImpl(repository, listService);
-        when(listService.getAll()).thenReturn(singletonList(mock(ItemList.class)));
+//        when(listService.getAll()).thenReturn(singletonList(mock(ItemList.class)));
     }
 
     @Test
@@ -39,7 +40,7 @@ public class TaskServiceImplTest {
         final List<Task> tasks = singletonList(task);
         when(repository.findAll()).thenReturn(tasks);
 
-        final List<Task> result = taskService.getAll();
+        final List<TaskDTO> result = taskService.getAll();
 
         assertThat(result).isEqualTo(tasks);
     }
@@ -48,7 +49,7 @@ public class TaskServiceImplTest {
     public void shouldReturnEmptyArrayIfNoTasks() {
         when(repository.findAll()).thenReturn(emptyList());
 
-        final List<Task> all = taskService.getAll();
+        final List<TaskDTO> all = taskService.getAll();
 
         assertThat(all).isEmpty();
     }

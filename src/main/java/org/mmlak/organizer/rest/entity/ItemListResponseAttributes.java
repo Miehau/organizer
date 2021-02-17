@@ -8,6 +8,6 @@ import org.mmlak.organizer.repository.entity.ItemList;
 @EqualsAndHashCode(callSuper = false)
 public class ItemListResponseAttributes extends ResponseAttributes {
 
-    private final ItemList itemList;
+    private final ItemListDto itemList;
 
 }

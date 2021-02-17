@@ -4,6 +4,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.mmlak.organizer.OrganizerApplication;
 import org.mmlak.organizer.repository.entity.Task;
+import org.mmlak.organizer.rest.entity.TaskDTO;
 import org.mmlak.organizer.service.TaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 loader = SpringBootContextLoader.class)
 public class TaskSteps {
 
-    private List<Task> response;
+    private List<TaskDTO> response;
 
     @Autowired
     private TaskServiceImpl taskService;

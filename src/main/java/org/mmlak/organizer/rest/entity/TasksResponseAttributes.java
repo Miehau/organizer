@@ -7,5 +7,5 @@ import org.mmlak.organizer.repository.entity.Task;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class TasksResponseAttributes extends ResponseAttributes{
-    private final Task task;
+    private final TaskDTO task;
 }
