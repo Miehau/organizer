@@ -11,11 +11,13 @@ public interface ListService {
 
     List<ItemListDto> getAll();
 
-    ItemListDto save(ItemList itemList);
+    List<ItemList> findAll();
 
-    ItemListDto getById(UUID id);
+    ItemList save(ItemList itemList);
 
-    List<ItemListDto> getListsByTask(Task task);
+    ItemList getById(UUID id);
+
+    List<ItemList> getListsByTask(Task task);
 
     void addTaskToList(UUID listId, UUID taskId);
 }

@@ -20,6 +20,7 @@ import java.util.UUID;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
+import static org.mmlak.organizer.service.mapper.ItemListMapper.toDto;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -42,14 +43,14 @@ public class ListController {
 
     @GetMapping("/{listId}")
     public ResponseEntity<ResponseDocument> getList(@PathVariable UUID listId) {
-        final ItemListDto list = listService.getById(listId);
+        final ItemListDto list = toDto(listService.getById(listId));
         return ok(toResponse(singletonList(list)));
     }
 
     @PostMapping
     @CrossOrigin
     public ResponseEntity<ResponseDocument> add(@RequestBody final ItemList itemList) {
-        final ItemListDto createdList = listService.save(itemList);
+        final ItemListDto createdList = toDto(listService.save(itemList));
         return created(URI.create(format("http://localhost:8080/list/{%s}", createdList.getId())))
                 .body(toResponse(singletonList(createdList)));
     }

@@ -15,5 +15,7 @@ public interface TaskService {
 
     TaskDTO add(Task task);
 
+    Task findTaskById(String taskId);
+
     void delete(UUID taskId);
 }

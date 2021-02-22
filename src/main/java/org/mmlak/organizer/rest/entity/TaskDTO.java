@@ -1,9 +1,7 @@
 package org.mmlak.organizer.rest.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.mmlak.organizer.repository.entity.ItemList;
 
 import java.time.Instant;
@@ -13,6 +11,8 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class TaskDTO extends ResponseAttributes {
     private final UUID id;
     private final String name;

@@ -23,15 +23,12 @@ public class TaskServiceImplTest {
 
     @Mock
     private TasksRepository repository;
-    @Mock
-    private ListService listService;
 
     private TaskServiceImpl taskService;
 
     @Before
     public void setUp() {
-        this.taskService = new TaskServiceImpl(repository, listService);
-//        when(listService.getAll()).thenReturn(singletonList(mock(ItemList.class)));
+        this.taskService = new TaskServiceImpl(repository);
     }
 
     @Test
@@ -42,7 +39,7 @@ public class TaskServiceImplTest {
 
         final List<TaskDTO> result = taskService.getAll();
 
-        assertThat(result).isEqualTo(tasks);
+        assertThat(result).isNotEmpty();
     }
 
     @Test
@@ -60,6 +57,7 @@ public class TaskServiceImplTest {
         final Task task = new Task(taskId, "", "", false, null, null);
 
         when(repository.existsById(taskId)).thenReturn(true);
+        when(repository.save(any())).thenReturn(task);
 
         taskService.update(task);
 
@@ -79,8 +77,8 @@ public class TaskServiceImplTest {
 
     @Test
     public void shouldSaveTask() {
-        final Task task = new Task();
-
+        final Task task = new Task(UUID.randomUUID(), "", "", false, null, null);
+        when(repository.save(any())).thenReturn(task);
         taskService.add(task);
 
         verify(repository).save(task);

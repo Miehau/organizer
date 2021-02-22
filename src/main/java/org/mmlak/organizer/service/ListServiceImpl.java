@@ -3,7 +3,6 @@ package org.mmlak.organizer.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mmlak.organizer.repository.ItemListRepository;
-import org.mmlak.organizer.repository.TasksRepository;
 import org.mmlak.organizer.repository.entity.ItemList;
 import org.mmlak.organizer.repository.entity.Task;
 import org.mmlak.organizer.rest.entity.ItemListDto;
@@ -25,37 +24,43 @@ import static org.mmlak.organizer.util.CollectionUtil.toList;
 @Transactional
 public class ListServiceImpl implements ListService {
     private final ItemListRepository itemListRepository;
-    private final TasksRepository tasksRepository;
+    private final TaskService taskService;
 
     @Override
+    @Deprecated
     public List<ItemListDto> getAll() {
         return toDto(toList(itemListRepository.findAll()));
     }
 
     @Override
-    public ItemListDto save(ItemList itemList) {
+    public List<ItemList> findAll() {
+        return toList(itemListRepository.findAll());
+    }
+
+    @Override
+    public ItemList save(ItemList itemList) {
         log.debug("Saving list: [{}].", itemList);
-        return toDto(itemListRepository.save(itemList));
+        return itemListRepository.save(itemList);
     }
 
     @Override
-    public ItemListDto getById(UUID id) {
-        return toDto(itemListRepository.findById(id).orElseThrow(() -> new RuntimeException(format("Cannot find any list with id [%s].", id))));
+    public ItemList getById(UUID id) {
+        return itemListRepository.findById(id).orElseThrow(() -> new RuntimeException(format("Cannot find any list with id [%s].", id)));
     }
 
     @Override
-    public List<ItemListDto> getListsByTask(Task task) {
+    public List<ItemList> getListsByTask(Task task) {
         return null;
     }
 
     @Override
     public void addTaskToList(UUID listId, UUID taskId) {
         Optional<ItemList> list = itemListRepository.findById(listId);
-        Optional<Task> task = tasksRepository.findById(taskId);
-        if (list.isEmpty() || task.isEmpty()) {
-            throw new NotFoundException(list.isEmpty() ? listId.toString() : taskId.toString(), list.isEmpty() ? ItemList.class : Task.class);
+        Task task = taskService.findTaskById(taskId.toString());
+        if (list.isEmpty()) {
+            throw new NotFoundException(listId.toString(), ItemList.class);
         }
         final ItemList itemList = list.get();
-        itemList.addTask(task.get());
+        itemList.addTask(task);
     }
 }

@@ -57,6 +57,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task findTaskById(String taskId) {
+        return repository.findById(UUID.fromString(taskId)).orElseThrow(() -> new TaskNotFoundException(taskId));
+    }
+
+    @Override
     public void delete(UUID taskId) {
         repository.deleteById(taskId);
     }
