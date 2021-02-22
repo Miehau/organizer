@@ -1,4 +1,4 @@
-package org.mmlak.organizer.rest.entity;
+package org.mmlak.organizer.rest.dto;
 
 import lombok.Data;
 

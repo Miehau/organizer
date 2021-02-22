@@ -1,7 +1,7 @@
-package org.mmlak.organizer.service.mapper;
+package org.mmlak.organizer.rest.mapper;
 
 import org.mmlak.organizer.repository.entity.ItemList;
-import org.mmlak.organizer.rest.entity.ItemListDto;
+import org.mmlak.organizer.rest.dto.ItemListDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

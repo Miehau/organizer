@@ -1,7 +1,7 @@
 package org.mmlak.organizer.service;
 
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.rest.entity.TaskDTO;
+import org.mmlak.organizer.rest.dto.TaskDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,11 +9,11 @@ import java.util.UUID;
 public interface TaskService {
     List<TaskDTO> getAll();
 
-    TaskDTO get(String taskId);
+    Task get(String taskId);
 
-    TaskDTO update(Task task);
+    Task update(Task task);
 
-    TaskDTO add(Task task);
+    Task add(Task task);
 
     Task findTaskById(String taskId);
 

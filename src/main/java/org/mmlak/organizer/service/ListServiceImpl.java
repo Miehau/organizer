@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mmlak.organizer.repository.ItemListRepository;
 import org.mmlak.organizer.repository.entity.ItemList;
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.rest.entity.ItemListDto;
+import org.mmlak.organizer.rest.dto.ItemListDto;
 import org.mmlak.organizer.service.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.lang.String.format;
-import static org.mmlak.organizer.service.mapper.ItemListMapper.toDto;
+import static org.mmlak.organizer.rest.mapper.ItemListMapper.toDto;
 import static org.mmlak.organizer.util.CollectionUtil.toList;
 
 @Service

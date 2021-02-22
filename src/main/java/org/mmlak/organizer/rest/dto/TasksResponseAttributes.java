@@ -1,8 +1,7 @@
-package org.mmlak.organizer.rest.entity;
+package org.mmlak.organizer.rest.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.mmlak.organizer.repository.entity.Task;
 
 @Data
 @EqualsAndHashCode(callSuper = false)

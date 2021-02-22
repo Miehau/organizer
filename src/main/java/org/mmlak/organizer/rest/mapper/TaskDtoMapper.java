@@ -1,7 +1,7 @@
-package org.mmlak.organizer.service.mapper;
+package org.mmlak.organizer.rest.mapper;
 
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.rest.entity.TaskDTO;
+import org.mmlak.organizer.rest.dto.TaskDTO;
 
 public final class TaskDtoMapper {
     private TaskDtoMapper() {

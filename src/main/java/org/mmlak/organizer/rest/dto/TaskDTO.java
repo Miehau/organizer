@@ -1,8 +1,7 @@
-package org.mmlak.organizer.rest.entity;
+package org.mmlak.organizer.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-import org.mmlak.organizer.repository.entity.ItemList;
 
 import java.time.Instant;
 import java.util.List;

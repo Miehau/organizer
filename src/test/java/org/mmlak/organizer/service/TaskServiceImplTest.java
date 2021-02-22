@@ -4,9 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mmlak.organizer.repository.TasksRepository;
-import org.mmlak.organizer.repository.entity.ItemList;
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.rest.entity.TaskDTO;
+import org.mmlak.organizer.rest.dto.TaskDTO;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
