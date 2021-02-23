@@ -1,13 +1,12 @@
 package org.mmlak.organizer.service;
 
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.rest.dto.TaskDTO;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface TaskService {
-    List<TaskDTO> getAll();
+    List<Task> getAll();
 
     Task get(String taskId);
 

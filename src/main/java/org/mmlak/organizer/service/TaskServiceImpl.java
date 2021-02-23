@@ -5,17 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.mmlak.organizer.repository.TasksRepository;
 import org.mmlak.organizer.repository.entity.CoreData;
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.rest.dto.TaskDTO;
 import org.mmlak.organizer.service.exception.TaskNotFoundException;
-import org.mmlak.organizer.rest.mapper.TaskDtoMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import static java.lang.String.format;
 import static org.mmlak.organizer.util.CollectionUtil.toList;
 
 @Service
@@ -28,10 +24,8 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public List<TaskDTO> getAll() {
-        return toList(repository.findAll()).stream()
-                .map(TaskDtoMapper::toDto)
-                .collect(Collectors.toList());
+    public List<Task> getAll() {
+        return toList(repository.findAll());
     }
 
     @Override

@@ -7,7 +7,8 @@ import org.mmlak.organizer.rest.dto.ResponseData;
 import org.mmlak.organizer.rest.dto.ResponseDocument;
 import org.mmlak.organizer.rest.dto.TaskDTO;
 import org.mmlak.organizer.rest.dto.TasksResponseAttributes;
-import org.mmlak.organizer.service.TaskServiceImpl;
+import org.mmlak.organizer.rest.mapper.TaskDtoMapper;
+import org.mmlak.organizer.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,12 +30,12 @@ import static org.springframework.http.ResponseEntity.*;
 @Slf4j
 public class TaskController {
 
-    private final TaskServiceImpl taskService;
+    private final TaskService taskService;
 
     @GetMapping("/all")
     @CrossOrigin
     public ResponseEntity<ResponseDocument> getAll() {
-        return ok(toResponse(taskService.getAll()));
+        return ok(toResponse(taskService.getAll().stream().map(TaskDtoMapper::toDto).collect(toList())));
     }
 
     private ResponseDocument toResponse(final List<TaskDTO> attributes) {

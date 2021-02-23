@@ -36,7 +36,7 @@ public class TaskServiceImplTest {
         final List<Task> tasks = singletonList(task);
         when(repository.findAll()).thenReturn(tasks);
 
-        final List<TaskDTO> result = taskService.getAll();
+        final List<Task> result = taskService.getAll();
 
         assertThat(result).isNotEmpty();
     }
@@ -45,7 +45,7 @@ public class TaskServiceImplTest {
     public void shouldReturnEmptyArrayIfNoTasks() {
         when(repository.findAll()).thenReturn(emptyList());
 
-        final List<TaskDTO> all = taskService.getAll();
+        final List<Task> all = taskService.getAll();
 
         assertThat(all).isEmpty();
     }
