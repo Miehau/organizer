@@ -37,7 +37,7 @@ public class ListController {
     @CrossOrigin
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDocument> getAllLists() {
-        final List<ItemListDto> lists = listService.getAll();
+        final List<ItemListDto> lists = toDto(listService.findAll());
         return ok(toResponse(lists));
     }
 

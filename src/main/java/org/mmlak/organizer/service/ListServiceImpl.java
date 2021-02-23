@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.mmlak.organizer.repository.ItemListRepository;
 import org.mmlak.organizer.repository.entity.ItemList;
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.rest.dto.ItemListDto;
 import org.mmlak.organizer.service.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.lang.String.format;
-import static org.mmlak.organizer.rest.mapper.ItemListMapper.toDto;
 import static org.mmlak.organizer.util.CollectionUtil.toList;
 
 @Service
@@ -25,12 +23,6 @@ import static org.mmlak.organizer.util.CollectionUtil.toList;
 public class ListServiceImpl implements ListService {
     private final ItemListRepository itemListRepository;
     private final TaskService taskService;
-
-    @Override
-    @Deprecated
-    public List<ItemListDto> getAll() {
-        return toDto(toList(itemListRepository.findAll()));
-    }
 
     @Override
     public List<ItemList> findAll() {
@@ -56,7 +48,7 @@ public class ListServiceImpl implements ListService {
     @Override
     public void addTaskToList(UUID listId, UUID taskId) {
         Optional<ItemList> list = itemListRepository.findById(listId);
-        Task task = taskService.findTaskById(taskId.toString());
+        Task task = taskService.find(taskId.toString());
         if (list.isEmpty()) {
             throw new NotFoundException(listId.toString(), ItemList.class);
         }
