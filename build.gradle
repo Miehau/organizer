@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.4.0'
 	id 'java'
+	id 'jacoco'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -51,10 +52,17 @@ dependencies {
 }
 
 test {
+	useJUnitPlatform()
 	testLogging {
 		events "passed", "skipped", "failed"
 		exceptionFormat "full"
 	}
+	finalizedBy jacocoTestReport
+//	testLogging.showStandardStreams = true uncomment for full test output
+}
+
+jacocoTestReport {
+	dependsOn test // tests are required to run before generating the report
 }
 
 task cucumber() {
