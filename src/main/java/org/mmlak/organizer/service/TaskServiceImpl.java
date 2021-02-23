@@ -29,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task get(String taskId) {
+    public Task find(String taskId) {
         return repository.findById(UUID.fromString(taskId)).orElseThrow(() -> new TaskNotFoundException(taskId));
     }
 
@@ -46,11 +46,6 @@ public class TaskServiceImpl implements TaskService {
         log.debug("Creating task [{}].", task);
         task.setCoreData(new CoreData());
         return repository.save(task);
-    }
-
-    @Override
-    public Task findTaskById(String taskId) {
-        return repository.findById(UUID.fromString(taskId)).orElseThrow(() -> new TaskNotFoundException(taskId));
     }
 
     @Override

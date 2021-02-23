@@ -50,12 +50,12 @@ public class TaskController {
     @GetMapping("/{taskId}")
     @CrossOrigin
     public ResponseEntity<ResponseDocument> get(@PathVariable final String taskId) {
-        return ok(toResponse(singletonList(toDto(taskService.get(taskId)))));
+        return ok(toResponse(singletonList(toDto(taskService.find(taskId)))));
     }
 
-    @PutMapping("/{taskId}")
+    @PutMapping({"", "/"})
     @CrossOrigin
-    private ResponseEntity<ResponseDocument> updateTask(@RequestBody final Task task) {
+    public ResponseEntity<ResponseDocument> updateTask(@RequestBody final Task task) {
         TaskDTO updatedTask = toDto(taskService.update(task));
         return ok(toResponse(singletonList(updatedTask)));
     }

@@ -1,15 +1,17 @@
 package org.mmlak.organizer.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mmlak.organizer.repository.TasksRepository;
 import org.mmlak.organizer.repository.entity.Task;
-import org.mmlak.organizer.rest.dto.TaskDTO;
+import org.mmlak.organizer.service.exception.TaskNotFoundException;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Collections.emptyList;
@@ -17,7 +19,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TaskServiceImplTest {
 
     @Mock
@@ -25,7 +27,7 @@ public class TaskServiceImplTest {
 
     private TaskServiceImpl taskService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.taskService = new TaskServiceImpl(repository);
     }
@@ -63,15 +65,14 @@ public class TaskServiceImplTest {
         verify(repository).save(task);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldThrowExceptionWhenUpdatingNonExistentTask() {
         final UUID taskId = UUID.randomUUID();
         final Task task = new Task(taskId, "", "", false, null, null);
 
         when(repository.existsById(taskId)).thenReturn(false);
 
-        taskService.update(task);
-        //fail
+        Assertions.assertThrows(TaskNotFoundException.class, () -> taskService.update(task));
     }
 
     @Test
@@ -81,5 +82,24 @@ public class TaskServiceImplTest {
         taskService.add(task);
 
         verify(repository).save(task);
+    }
+
+    @Test
+    public void shouldFindTask(){
+        final var id = UUID.randomUUID();
+        final Task task = new Task(id, "", "", false, null, null);
+        when(repository.findById(id)).thenReturn(Optional.of(task));
+
+        final var result = taskService.find(id.toString());
+
+        assertThat(result).isEqualTo(task);
+    }
+
+    @Test
+    public void shouldDeleteTask(){
+        final var taskId = UUID.randomUUID();
+        taskService.delete(taskId);
+
+        verify(repository).deleteById(taskId);
     }
 }

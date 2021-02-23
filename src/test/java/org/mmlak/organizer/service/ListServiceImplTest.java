@@ -1,26 +1,27 @@
 package org.mmlak.organizer.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mmlak.organizer.repository.ItemListRepository;
 import org.mmlak.organizer.repository.entity.CoreData;
 import org.mmlak.organizer.repository.entity.ItemList;
 import org.mmlak.organizer.repository.entity.Task;
+import org.mmlak.organizer.service.exception.NotFoundException;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ListServiceImplTest {
 
     @Mock
@@ -29,12 +30,8 @@ public class ListServiceImplTest {
     @Mock
     private TaskService taskService;
 
+    @InjectMocks
     private ListServiceImpl listService;
-
-    @Before
-    public void setUp() {
-        listService = new ListServiceImpl(itemListRepository, taskService);
-    }
 
     @Test
     public void shouldFindAll() {
@@ -91,10 +88,22 @@ public class ListServiceImplTest {
         final var listId = UUID.randomUUID();
         final var itemList = this.createItemList(listId);
         when(itemListRepository.findById(listId)).thenReturn(Optional.of(itemList));
-        when(taskService.findTaskById(taskId.toString())).thenReturn(new Task());
+        when(taskService.find(taskId.toString())).thenReturn(new Task());
 
         listService.addTaskToList(listId, taskId);
 
         assertThat(itemList.getItems()).hasSize(1);
+    }
+
+    @Test
+    public void shouldAddTaskToList_whenListNotFound_throwsException() {
+        final var taskId = UUID.randomUUID();
+        final var listId = UUID.randomUUID();
+        final var itemList = this.createItemList(listId);
+        when(itemListRepository.findById(listId)).thenReturn(Optional.empty());
+        when(taskService.find(taskId.toString())).thenReturn(new Task());
+
+        assertThrows(NotFoundException.class, () -> listService.addTaskToList(listId, taskId));
+
     }
 }
