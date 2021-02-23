@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = OrganizerApplication.class, properties = "spring.main.allow-bean-definition-overriding=true")
+@SpringBootTest(classes = OrganizerApplication.class)
 public class OrganizerApplicationTests {
 
     @Test

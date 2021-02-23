@@ -25,9 +25,9 @@ import static org.assertj.core.api.BDDAssertions.then;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        classes = TaskControllerIntegrationTestConfig.class,
         properties = "spring.main.allow-bean-definition-overriding=true"
 )
-@Import(TaskControllerIntegrationTestConfig.class)
 public class TaskControllerIntegrationTest {
 
     @Test
@@ -92,10 +92,9 @@ public class TaskControllerIntegrationTest {
         then(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         then(response.getBody()).isNull();
     }
-}
 
+}
 @TestConfiguration(proxyBeanMethods = false)
-@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 class TaskControllerIntegrationTestConfig {
 
 
@@ -133,4 +132,5 @@ class TaskControllerIntegrationTestConfig {
             }
         };
     }
+
 }
