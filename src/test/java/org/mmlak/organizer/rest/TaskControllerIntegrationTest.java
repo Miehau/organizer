@@ -7,11 +7,10 @@ import org.mmlak.organizer.service.TaskService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -25,8 +24,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = TaskControllerIntegrationTestConfig.class,
-        properties = "spring.main.allow-bean-definition-overriding=true"
+        classes = TaskControllerIntegrationTest.TaskControllerIntegrationTestConfig.class
 )
 public class TaskControllerIntegrationTest {
 
@@ -92,45 +90,45 @@ public class TaskControllerIntegrationTest {
         then(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         then(response.getBody()).isNull();
     }
+    @Configuration(proxyBeanMethods = false)
+    @EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
+    static class TaskControllerIntegrationTestConfig {
 
-}
-@TestConfiguration(proxyBeanMethods = false)
-class TaskControllerIntegrationTestConfig {
 
+        @Bean
+        TaskController taskController(TaskService taskService) {
+            return new TaskController(taskService);
+        }
 
-    @Bean
-    TaskController taskController(TaskService taskService) {
-        return new TaskController(taskService);
+        @Bean
+        TaskService taskService() {
+            return new TaskService() {
+                @Override
+                public List<Task> getAll() {
+                    return Arrays.asList(new Task(), new Task());
+                }
+
+                @Override
+                public Task find(final String taskId) {
+                    return new Task();
+                }
+
+                @Override
+                public Task update(final Task task) {
+                    return task;
+                }
+
+                @Override
+                public Task add(final Task task) {
+                    return task;
+                }
+
+                @Override
+                public void delete(final UUID taskId) {
+
+                }
+            };
+        }
+
     }
-
-    @Bean
-    TaskService taskService() {
-        return new TaskService() {
-            @Override
-            public List<Task> getAll() {
-                return Arrays.asList(new Task(), new Task());
-            }
-
-            @Override
-            public Task find(final String taskId) {
-                return new Task();
-            }
-
-            @Override
-            public Task update(final Task task) {
-                return task;
-            }
-
-            @Override
-            public Task add(final Task task) {
-                return task;
-            }
-
-            @Override
-            public void delete(final UUID taskId) {
-
-            }
-        };
-    }
-
 }
